@@ -457,7 +457,10 @@ function load() { try { const s = localStorage.getItem('plan_v3'); if(s) S={...D
 function save() { localStorage.setItem('plan_v3', JSON.stringify(S)); }
 
 function todayStr() { return fmtD(new Date()); }
-function fmtD(d) { return d.toISOString().split('T')[0]; }
+function fmtD(d) {
+  const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
 function addDays(s,n) { const d=new Date(s); d.setDate(d.getDate()+n); return fmtD(d); }
 
 function czShort(s) {
