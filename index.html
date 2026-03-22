@@ -707,7 +707,7 @@ function renderPrehled() {
             <span style="color:var(--green)">+${fmt(d.earned)}</span>
             ${d.exps>0?`<span style="color:var(--red)">−${fmt(d.exps)}</span>`:''}
             <span style="color:var(--text3);font-weight:600">=</span>
-            <span style="color:${net>=0?'var(--green)':'var(--red)';font-weight:600">${net>=0?'+':''}${fmt(net)}</span>
+            <span style="color:${net>=0?'var(--green)':'var(--red)'};font-weight:600">${net>=0?'+':''}${fmt(net)}</span>
           </div>
         </div>
         <div class="list-right">
@@ -1014,8 +1014,7 @@ async function aiCategorizuj() {
     const key = e.note?.toLowerCase().trim();
     if(key) existing[key] = e.cat;
   });
-  const existingStr = Object.entries(existing).slice(0,20).map(([k,v])=>`"${k}" → ${v}`).join('
-');
+  const existingStr = Object.entries(existing).slice(0,20).map(([k,v])=>`"${k}" → ${v}`).join('\n');
 
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -1027,8 +1026,7 @@ async function aiCategorizuj() {
         system: `Jsi asistent pro kategorizaci výdajů. Zařaď výdaj do jedné z kategorií: ${CATS.join(', ')}.
 Vrať POUZE JSON: {"cat":"kategorie s emoji","note":"standardizovaný název"}
 Příklady standardizace: "Albert hypermarket" → "Albert", "Bolt food objednávka" → "Bolt Food".
-${existingStr ? 'Podobné výdaje které už existují:
-'+existingStr : ''}
+${existingStr ? 'Podobné výdaje které už existují:\n'+existingStr : ''}
 Podobné výdaje sluč pod stejný název (např. všechny "Kaufland*" → "Kaufland").`,
         messages: [{ role: 'user', content: `Výdaj: "${note}"` }]
       })
